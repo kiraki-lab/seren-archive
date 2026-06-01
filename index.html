@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>키라키 유챔 세렌 최소컷 아카이브</title>
-  <meta name="description" content="26년 3월 19일 패치 이후 유챔 세렌 직접 클리어 기록을 HEXA 환산 기준으로 정리합니다." />
+  <meta name="description" content="유챔 세렌 기록을 HEXA 환산 기준으로 정리합니다." />
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -14,42 +14,62 @@
       <div>
         <p class="eyebrow">Kiraki Archive</p>
         <h1>유챔 세렌 최소컷 아카이브</h1>
-        <p class="lead">26년 3월 19일 패치 이후, 유챔 세렌 직접 클리어 기록을 <b>HEXA 환산</b> 기준으로 정리합니다.</p>
+        <p class="lead">직접 클리어·참고 기록을 모아, 선택한 필터 안에서 직업별 가장 좋은 <b>HEXA 환산</b>을 보여줍니다.</p>
         <div class="actions">
           <a class="primary" href="submit.html">기록 제보하기</a>
           <a class="ghost" href="https://youtube.com/channel/UCTa93vcBRawFA1YLyDOAkdw?si=RAosYvNcb20jcBWu" target="_blank" rel="noopener">키라키 채널</a>
         </div>
       </div>
       <div class="hero-card">
-        <span>기준</span>
-        <strong>HEXA 환산</strong>
-        <small>유챔 직접 클리어 + 환산 확인 자료만 메인 반영</small>
+        <span>보기 기준</span>
+        <strong>필터별 최저</strong>
+        <small>전체 / 세렌 패치 후 / 공용코어 후 기준으로 직업별 최저 또는 평균을 비교합니다.</small>
       </div>
     </div>
   </header>
 
   <main class="container">
     <section class="stats">
-      <div class="stat"><span>검증 완료</span><strong id="approvedCount">0</strong></div>
+      <div class="stat"><span>필터 내 기록</span><strong id="approvedCount">0</strong></div>
       <div class="stat"><span>최저 HEXA</span><strong id="lowestScore">-</strong></div>
       <div class="stat"><span>등록 직업</span><strong id="jobCount">0</strong></div>
-      <div class="stat"><span>최근 업데이트</span><strong id="lastUpdated">-</strong></div>
+      <div class="stat"><span>최근 기록</span><strong id="lastUpdated">-</strong></div>
     </section>
 
-    <section class="panel">
-      <div class="section-head">
+    <section class="panel chart-panel">
+      <div class="section-head chart-head">
         <div>
-          <h2>직업별 최소컷 분포</h2>
-          <p>검증 완료된 유챔 세렌 직접 클리어 기록 중 직업별 최저 HEXA 환산입니다.</p>
+          <h2>직업별 환산 분포</h2>
+          <p id="scopeDescription">선택한 필터 안에서 직업별 최저 HEXA 환산을 표시합니다.</p>
         </div>
         <select id="sortSelect" aria-label="정렬">
-          <option value="asc">최소컷 낮은 순</option>
-          <option value="desc">최소컷 높은 순</option>
+          <option value="asc">낮은 환산 ↑</option>
+          <option value="desc">높은 환산 ↓</option>
           <option value="job">직업 이름순</option>
           <option value="date">최신순</option>
         </select>
       </div>
-      <div class="chart-wrap"><canvas id="jobChart"></canvas></div>
+
+      <div class="control-row" aria-label="자료 필터">
+        <span class="control-label">자료 필터</span>
+        <button class="chip active" type="button" data-scope="all">전체 지표</button>
+        <button class="chip" type="button" data-scope="serenPatch">세렌 패치 후</button>
+        <button class="chip" type="button" data-scope="corePatch">4.16 공용코어 후</button>
+      </div>
+
+      <div class="control-row" aria-label="보기 기준">
+        <span class="control-label">보기 기준</span>
+        <button class="chip active" type="button" data-metric="min">최저 환산</button>
+        <button class="chip" type="button" data-metric="avg">평균 환산</button>
+      </div>
+
+      <div class="chart-scroller">
+        <div id="chartInner" class="chart-inner">
+          <canvas id="jobChart"></canvas>
+        </div>
+      </div>
+
+      <div id="overrunBox" class="overrun-box" hidden></div>
     </section>
 
     <section class="toolbar">
@@ -61,7 +81,7 @@
 
     <section class="panel rules">
       <h2>검증 기준</h2>
-      <p>메인 차트에는 <b>유챔 세렌 직접 클리어</b>, <b>클리어 당시 HEXA 환산 확인</b>, <b>26년 3월 19일 패치 이후</b> 자료만 반영합니다. 데티/하드 세렌 자료는 참고 자료로 분리합니다.</p>
+      <p><b>전체 지표</b>는 패치 이전과 참고 기록까지 포함합니다. <b>세렌 패치 후</b>는 2026-03-19 이후, <b>4.16 공용코어 후</b>는 2026-04-16 이후 기록만 보여줍니다. 시간 초과 자료는 그래프에는 포함하되 하단에 별도로 표시합니다.</p>
     </section>
   </main>
 
