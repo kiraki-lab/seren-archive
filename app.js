@@ -8,6 +8,32 @@ const CHART_PALETTE = [
   '#eab308', '#10b981'
 ];
 
+const JOB_ALIASES = {
+  '다크나이트':'닼나',
+  '블래스터':'블래',
+  '데몬슬레이어':'데슬',
+  '데몬어벤져':'데벤',
+  '보우마스터':'보마',
+  '패스파인더':'패파',
+  '윈드브레이커':'윈브',
+  '메르세데스':'메르',
+  '와일드헌터':'와헌',
+  '아크메이지(불,독)':'불독',
+  '아크메이지(불독)':'불독',
+  '아크메이지(썬,콜)':'썬콜',
+  '아크메이지(썬콜)':'썬콜',
+  '플레임위자드':'플위',
+  '루미너스':'루미',
+  '배틀메이지':'배메',
+  '키네시스':'키네',
+  '나이트로드':'나로',
+  '듀얼블레이드':'듀블',
+  '나이트워커':'나워',
+  '캐논슈터':'캐슈',
+  '스트라이커':'스커',
+  '엔젤릭버스터':'엔버'
+};
+
 let allRecords = [];
 let chart;
 let currentScope = 'all';
@@ -37,6 +63,7 @@ function truthy(v){return String(v).toLowerCase()==='true'||v==='TRUE'||v==='1';
 function num(v){return Number(String(v||'').replace(/[^0-9.\-]/g,''));}
 function fmt(n){return Number(n).toLocaleString('ko-KR');}
 function safe(v){return String(v||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function displayJob(job){return JOB_ALIASES[job] || job || '';}
 function isApproved(r){return truthy(r.approved)&&r.status==='검증완료'&&num(r.clear_hexa||r.main_score)>0;}
 function isOverrun(r){return num(r.clear_seconds_left)<0;}
 function directLabel(r){return truthy(r.is_main_record)?'직접 기록':truthy(r.reference_only)?'참고 기록':'후보 기록';}
@@ -70,7 +97,7 @@ function metricText(){return currentMetric==='avg'?'평균 HEXA':'최저 HEXA';}
 function makeJobSeries(records){
   const map=new Map();
   records.forEach(r=>{
-    const job=r.job;
+    const job=displayJob(r.job);
     const score=num(r.clear_hexa||r.main_score);
     if(!job||!score)return;
     if(!map.has(job)) map.set(job,[]);
@@ -101,12 +128,12 @@ function filteredRecords(){
   const q=document.querySelector('#searchInput').value.trim().toLowerCase();
   const job=document.querySelector('#jobFilter').value;
   let rows=baseScopeRecords();
-  if(job!=='all')rows=rows.filter(r=>r.job===job);
-  if(q)rows=rows.filter(r=>[r.job,r.character_name,r.server,r.admin_note,r.boss_variant].join(' ').toLowerCase().includes(q));
+  if(job!=='all')rows=rows.filter(r=>displayJob(r.job)===job);
+  if(q)rows=rows.filter(r=>[displayJob(r.job),r.job,r.character_name,r.server,r.admin_note,r.boss_variant].join(' ').toLowerCase().includes(q));
   const sort=document.querySelector('#sortSelect').value;
   rows.sort((a,b)=>{
     if(sort==='desc')return num(b.clear_hexa)-num(a.clear_hexa);
-    if(sort==='job')return String(a.job).localeCompare(String(b.job),'ko');
+    if(sort==='job')return String(displayJob(a.job)).localeCompare(String(displayJob(b.job)),'ko');
     if(sort==='date')return String(b.clear_date).localeCompare(String(a.clear_date));
     return num(a.clear_hexa)-num(b.clear_hexa);
   });
@@ -118,7 +145,7 @@ function renderStats(){
   const scores=rows.map(r=>num(r.clear_hexa||r.main_score)).filter(Boolean);
   document.querySelector('#approvedCount').textContent=rows.length;
   document.querySelector('#lowestScore').textContent=scores.length?fmt(Math.min(...scores)):'-';
-  document.querySelector('#jobCount').textContent=new Set(rows.map(r=>r.job).filter(Boolean)).size;
+  document.querySelector('#jobCount').textContent=new Set(rows.map(r=>displayJob(r.job)).filter(Boolean)).size;
   const dates=rows.map(r=>r.clear_date).filter(Boolean).sort();
   document.querySelector('#lastUpdated').textContent=dates.length?dates.at(-1):'-';
   document.querySelector('#scopeDescription').textContent=`${scopeText()} 중 직업별 ${metricText()}를 표시합니다.`;
@@ -127,7 +154,7 @@ function renderStats(){
 function renderJobFilter(){
   const sel=document.querySelector('#jobFilter');
   const current=sel.value;
-  const jobs=[...new Set(baseScopeRecords().map(r=>r.job).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko'));
+  const jobs=[...new Set(baseScopeRecords().map(r=>displayJob(r.job)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko'));
   sel.innerHTML='<option value="all">전체 직업</option>'+jobs.map(j=>`<option value="${safe(j)}">${safe(j)}</option>`).join('');
   if(jobs.includes(current))sel.value=current;
 }
@@ -139,11 +166,12 @@ function renderCards(records){
     const score=num(r.clear_hexa||r.main_score);
     const over=isOverrun(r);
     const thumb=r.thumbnail_url||'';
+    const jobName=displayJob(r.job);
     const watch=r.youtube_url?`<a class="watch" href="${safe(r.youtube_url)}" target="_blank" rel="noopener">유튜브 보기</a>`:'<span class="watch disabled">영상 링크 없음</span>';
     return `<article class="record-card ${over?'overrun-card':''}">
-      <div class="thumb"><img src="${safe(thumb)}" alt="${safe(r.job)} ${safe(r.character_name)} 유챔 세렌 클리어 영상"><span class="badge">${safe(directLabel(r))}</span></div>
+      <div class="thumb"><img src="${safe(thumb)}" alt="${safe(jobName)} ${safe(r.character_name)} 유챔 세렌 클리어 영상"><span class="badge">${safe(directLabel(r))}</span></div>
       <div class="body">
-        <div class="meta"><span class="dot"></span><span>${safe(r.job)}</span><span class="date">${safe(r.clear_date||'')}</span></div>
+        <div class="meta"><span class="dot"></span><span>${safe(jobName)}</span><span class="date">${safe(r.clear_date||'')}</span></div>
         <h3>HEXA ${fmt(score)}</h3>
         <p class="by">${safe(r.character_name||'')} · ${safe(r.server||'')}</p>
         <div class="tags"><span>${safe(r.boss_variant||'유챔 세렌')}</span><span>${safe(r.clear_time_left||'')} ${over?'초과':'남기고 클리어'}</span><span>${safe(r.patch_version||'')}</span></div>
@@ -241,7 +269,7 @@ function renderOverruns(records){
   const rows=records.filter(isOverrun).sort((a,b)=>num(a.clear_seconds_left)-num(b.clear_seconds_left));
   if(!rows.length){box.hidden=true;box.innerHTML='';return;}
   box.hidden=false;
-  box.innerHTML=`<strong>시간 초과 참고 기록</strong><div>${rows.map(r=>`${safe(r.job)} · ${safe(r.character_name)} · HEXA ${fmt(num(r.clear_hexa))} · ${Math.abs(num(r.clear_seconds_left))}초 초과`).join('<br>')}</div>`;
+  box.innerHTML=`<strong>시간 초과 참고 기록</strong><div>${rows.map(r=>`${safe(displayJob(r.job))} · ${safe(r.character_name)} · HEXA ${fmt(num(r.clear_hexa))} · ${Math.abs(num(r.clear_seconds_left))}초 초과`).join('<br>')}</div>`;
 }
 
 function setActiveButtons(){
