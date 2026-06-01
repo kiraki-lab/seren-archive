@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>키라키 유챔 세렌 최소컷 아카이브</title>
+  <meta name="description" content="26년 3월 19일 패치 이후 유챔 세렌 직접 클리어 기록을 HEXA 환산 기준으로 정리합니다." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Kiraki Archive</p>
+        <h1>유챔 세렌 최소컷 아카이브</h1>
+        <p class="lead">26년 3월 19일 패치 이후, 유챔 세렌 직접 클리어 기록을 <b>HEXA 환산</b> 기준으로 정리합니다.</p>
+        <div class="actions">
+          <a class="primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdTpHnbJGHl1pS1e1Ku8W6BK1RyKCX1An6xe2iA4cqO1qafQA/viewform" target="_blank" rel="noopener">기록 제보하기</a>
+          <a class="ghost" href="https://youtube.com/channel/UCTa93vcBRawFA1YLyDOAkdw?si=RAosYvNcb20jcBWu" target="_blank" rel="noopener">키라키 채널</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <span>기준</span>
+        <strong>HEXA 환산</strong>
+        <small>유챔 직접 클리어 + 환산 확인 자료만 메인 반영</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="stats">
+      <div class="stat"><span>검증 완료</span><strong id="approvedCount">0</strong></div>
+      <div class="stat"><span>최저 HEXA</span><strong id="lowestScore">-</strong></div>
+      <div class="stat"><span>등록 직업</span><strong id="jobCount">0</strong></div>
+      <div class="stat"><span>최근 업데이트</span><strong id="lastUpdated">-</strong></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>직업별 최소컷 분포</h2>
+          <p>검증 완료된 유챔 세렌 직접 클리어 기록 중 직업별 최저 HEXA 환산입니다.</p>
+        </div>
+        <select id="sortSelect" aria-label="정렬">
+          <option value="asc">최소컷 낮은 순</option>
+          <option value="desc">최소컷 높은 순</option>
+          <option value="job">직업 이름순</option>
+          <option value="date">최신순</option>
+        </select>
+      </div>
+      <div class="chart-wrap"><canvas id="jobChart"></canvas></div>
+    </section>
+
+    <section class="toolbar">
+      <input id="searchInput" type="search" placeholder="직업, 닉네임, 서버 검색" />
+      <select id="jobFilter"><option value="all">전체 직업</option></select>
+    </section>
+
+    <section id="records" class="record-grid" aria-live="polite"></section>
+
+    <section class="panel rules">
+      <h2>검증 기준</h2>
+      <p>메인 차트에는 <b>유챔 세렌 직접 클리어</b>, <b>클리어 당시 HEXA 환산 확인</b>, <b>26년 3월 19일 패치 이후</b> 자료만 반영합니다. 데티/하드 세렌 자료는 참고 자료로 분리합니다.</p>
+    </section>
+  </main>
+
+  <footer class="footer">Kiraki Seren Archive · GitHub Pages</footer>
+  <script src="app.js"></script>
+</body>
+</html>
