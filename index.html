@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>키라키 유챔 세렌 최소컷 아카이브</title>
   <meta name="description" content="유챔 세렌 기록을 HEXA 환산 기준으로 정리합니다." />
-  <link rel="stylesheet" href="styles.css?v=20260601c" />
-  <link rel="stylesheet" href="filters.css?v=20260601c" />
-  <link rel="stylesheet" href="theme.css?v=20260601c" />
+  <link rel="stylesheet" href="styles.css?v=20260601d" />
+  <link rel="stylesheet" href="filters.css?v=20260601d" />
+  <link rel="stylesheet" href="theme.css?v=20260601d" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="theme-clean">
-  <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 변경">✨ 키라키 모드</button>
+  <button id="themeToggle" class="theme-toggle" type="button" aria-label="테마 변경">
+    <span class="theme-toggle-main">✨ 키라키 모드</span>
+    <small>깔끔/반짝 전환</small>
+  </button>
 
   <header class="hero">
     <div class="container hero-grid">
@@ -67,16 +70,15 @@
         <button class="chip" type="button" data-metric="avg">평균 환산</button>
       </div>
 
-      <div class="compare-row" aria-label="내 환산 비교">
-        <span class="control-label">한눈 비교</span>
-        <input id="compareInput" class="compare-input" inputmode="numeric" placeholder="내 HEXA 예: 50000" />
-        <button id="applyCompare" class="chip compare-chip" type="button">내 환산선 표시</button>
-        <button id="clearCompare" class="chip ghost-chip" type="button">초기화</button>
-        <span id="compareStatus" class="compare-status">내 환산을 입력하면 그래프에 기준선이 표시됩니다.</span>
+      <div class="control-row" aria-label="그래프 보기">
+        <span class="control-label">그래프 보기</span>
+        <button class="chip active" type="button" data-view="fit">한눈 보기</button>
+        <button class="chip" type="button" data-view="detail">상세 보기</button>
+        <span class="view-help">한눈 보기는 전체 직업을 스크롤 없이 압축 표시합니다.</span>
       </div>
 
-      <div class="chart-scroller">
-        <div id="chartInner" class="chart-inner">
+      <div class="chart-scroller" id="chartScroller">
+        <div id="chartInner" class="chart-inner fit-view">
           <canvas id="jobChart"></canvas>
         </div>
       </div>
@@ -98,6 +100,6 @@
   </main>
 
   <footer class="footer">Kiraki Seren Archive · GitHub Pages</footer>
-  <script src="app.js?v=20260601c"></script>
+  <script src="app.js?v=20260601d"></script>
 </body>
 </html>
