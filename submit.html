@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>기록 제보하기 · 키라키 유챔 세렌 아카이브</title>
+  <meta name="description" content="키라키 유챔 세렌 최소컷 기록 제보 페이지" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="submit-hero">
+    <div class="container">
+      <p class="eyebrow">Build Submission</p>
+      <h1>기록 제보</h1>
+      <p class="lead">유튜브 클리어 영상과 HEXA 환산을 기준으로 검토합니다. 제출된 기록은 바로 공개되지 않고, PD 검수 후 반영됩니다.</p>
+      <div class="actions">
+        <a class="ghost" href="index.html">기록 페이지로 돌아가기</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container submit-main">
+    <form id="submissionForm" class="submit-panel">
+      <div class="notice" id="configNotice">
+        아직 제출 서버가 연결되지 않았습니다. 아래 폼은 입력 검사용으로 동작하며, Apps Script 웹앱 URL 연결 후 실제 제출됩니다.
+      </div>
+
+      <label class="field full">
+        <span>유튜브 URL <b>*</b></span>
+        <input name="youtube_url" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
+      </label>
+
+      <label class="field">
+        <span>직업 <b>*</b></span>
+        <select name="job" required>
+          <option value="">직업을 선택해주세요</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>보스 분류 <b>*</b></span>
+        <select name="boss_variant" required>
+          <option value="유챔 세렌">유챔 세렌</option>
+          <option value="하드 세렌 기반 유챔 참고">하드 세렌 기반 유챔 참고</option>
+          <option value="패치 이전 유챔 세렌 참고">패치 이전 유챔 세렌 참고</option>
+          <option value="데티 세렌 참고">데티 세렌 참고</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>게임 캐릭터 닉네임 <b>*</b></span>
+        <input name="character_name" type="text" placeholder="예: 키라키" required />
+      </label>
+
+      <label class="field">
+        <span>서버 <b>*</b></span>
+        <select name="server" required>
+          <option value="">서버를 선택해주세요</option>
+          <option>스카니아</option><option>베라</option><option>루나</option><option>크로아</option><option>엘리시움</option><option>오로라</option><option>레드</option><option>이노시스</option><option>유니온</option><option>제니스</option><option>아케인</option><option>노바</option><option>버닝</option><option>기타</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>HEXA 환산 <b>*</b></span>
+        <input name="clear_hexa" inputmode="numeric" placeholder="예: 45246" required />
+        <small>정확한 정수값을 입력해주세요. 약 4.9만이면 49000처럼 입력합니다.</small>
+      </label>
+
+      <label class="field">
+        <span>클리어 날짜 <b>*</b></span>
+        <input name="clear_date" type="date" required />
+      </label>
+
+      <label class="field">
+        <span>남은 시간 <b>*</b></span>
+        <input name="clear_time_left" type="text" placeholder="예: 10초 / 2분 2초 / -3초" required />
+      </label>
+
+      <label class="field">
+        <span>HEXA 확인 방식 <b>*</b></span>
+        <select name="hexa_source" required>
+          <option value="영상 내 확인">영상 내 확인</option>
+          <option value="첨부 스크린샷">첨부 스크린샷</option>
+          <option value="사용자 제보">사용자 제보</option>
+          <option value="확인 필요">확인 필요</option>
+        </select>
+      </label>
+
+      <label class="field full">
+        <span>시드링 / 한 줄 메모</span>
+        <textarea name="memo" rows="5" maxlength="500" placeholder="예: 리레4, 웨펖4 / 3페 극딜 타이밍 / 특이사항"></textarea>
+        <small><span id="memoCount">0</span>/500</small>
+      </label>
+
+      <label class="check full">
+        <input name="consent" type="checkbox" required />
+        <span>제보한 영상 URL, 닉네임, 서버, HEXA 환산, 클리어 시간이 사이트에 공개될 수 있음에 동의합니다.</span>
+      </label>
+
+      <div class="submit-actions full">
+        <button type="submit" class="primary submit-button">제보 보내기</button>
+        <span id="submitStatus" class="submit-status"></span>
+      </div>
+    </form>
+  </main>
+
+  <script src="submit-config.js"></script>
+  <script src="submit.js"></script>
+</body>
+</html>
