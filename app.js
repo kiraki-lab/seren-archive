@@ -2,6 +2,12 @@ const DATA_URL = 'data/public_records.csv';
 const SEREN_PATCH_DATE = '2026-03-19';
 const CORE_PATCH_DATE = '2026-04-16';
 
+const CHART_PALETTE = [
+  '#8b5cf6', '#f472b6', '#f59e0b', '#14b8a6', '#ef4444',
+  '#a855f7', '#22c55e', '#fb7185', '#06b6d4', '#c084fc',
+  '#eab308', '#10b981'
+];
+
 let allRecords = [];
 let chart;
 let currentScope = 'all';
@@ -147,13 +153,87 @@ function renderCards(records){
   }).join('');
 }
 
+function chartColor(index, record){
+  if(record && isOverrun(record)) return '#ef4444';
+  return CHART_PALETTE[index % CHART_PALETTE.length];
+}
+
+function chartBorder(index, record){
+  if(record && isOverrun(record)) return '#b91c1c';
+  return CHART_PALETTE[index % CHART_PALETTE.length];
+}
+
+const valueLabelPlugin = {
+  id: 'valueLabelPlugin',
+  afterDatasetsDraw(chart){
+    const {ctx} = chart;
+    const meta = chart.getDatasetMeta(0);
+    const data = chart.data.datasets[0].data;
+    ctx.save();
+    ctx.font = '700 11px system-ui, -apple-system, Segoe UI, sans-serif';
+    ctx.fillStyle = '#111827';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    meta.data.forEach((bar, index) => {
+      const value = data[index];
+      if(!value) return;
+      ctx.fillText(fmt(value), bar.x, bar.y - 4);
+    });
+    ctx.restore();
+  }
+};
+
 function renderChart(records){
   const series=makeJobSeries(records);
   const inner=document.querySelector('#chartInner');
-  inner.style.width=`${Math.max(920,series.length*34)}px`;
+  inner.style.width=`${Math.max(980,series.length*42)}px`;
   const ctx=document.querySelector('#jobChart');
   if(chart)chart.destroy();
-  chart=new Chart(ctx,{type:'bar',data:{labels:series.map(d=>d.job),datasets:[{label:metricText(),data:series.map(d=>d.score),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${metricText()} ${fmt(c.raw)}`}}},scales:{x:{ticks:{autoSkip:false,maxRotation:55,minRotation:45}},y:{ticks:{callback:v=>fmt(v)}}}}});
+
+  const values=series.map(d=>d.score);
+  const minValue=values.length?Math.min(...values):0;
+  const maxValue=values.length?Math.max(...values):0;
+  const yMin=values.length?Math.max(0,Math.floor((minValue-1500)/1000)*1000):0;
+  const yMax=values.length?Math.ceil((maxValue+1500)/1000)*1000:60000;
+
+  chart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:series.map(d=>d.job),
+      datasets:[{
+        label:metricText(),
+        data:values,
+        backgroundColor:series.map((d,i)=>chartColor(i,d.record)),
+        borderColor:series.map((d,i)=>chartBorder(i,d.record)),
+        borderWidth:1.4,
+        borderRadius:8,
+        borderSkipped:false,
+        barPercentage:0.74,
+        categoryPercentage:0.86
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          title:items=>series[items[0].dataIndex]?.job||'',
+          label:c=>`${metricText()} ${fmt(c.raw)}`,
+          afterLabel:c=>{
+            const r=series[c.dataIndex]?.record;
+            if(!r) return '';
+            return `${r.character_name||''} · ${r.server||''} · ${r.clear_date||''}`;
+          }
+        }}
+      },
+      scales:{
+        x:{ticks:{autoSkip:false,maxRotation:55,minRotation:45,color:'#374151',font:{weight:700}},grid:{display:false}},
+        y:{min:yMin,max:yMax,ticks:{callback:v=>fmt(v),color:'#6b7280'},grid:{color:'rgba(148,163,184,.22)'}}
+      }
+    },
+    plugins:[valueLabelPlugin]
+  });
 }
 
 function renderOverruns(records){
