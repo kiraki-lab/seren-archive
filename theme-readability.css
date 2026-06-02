@@ -1,0 +1,97 @@
+/* Theme readability polish. Layout stays unchanged; only contrast and mode labels are clarified. */
+.theme-toggle{
+  border:1px solid rgba(38,26,51,.16);
+  background:linear-gradient(135deg,#ffffff,#fbf8ff);
+  color:#24172f;
+  box-shadow:0 12px 28px rgba(80,70,95,.16);
+}
+.theme-toggle-main{font-weight:900;letter-spacing:-.01em;}
+.theme-toggle small{color:#5f566b;font-weight:700;}
+
+.theme-clean .theme-toggle{
+  background:linear-gradient(135deg,#ffffff,#f7f3ff);
+  border-color:#ddd3ef;
+}
+.theme-kiraki .theme-toggle{
+  background:linear-gradient(135deg,#fff,#ffe3f1 48%,#eef7ff);
+  border-color:#e879b9;
+  color:#231628;
+  box-shadow:0 0 0 3px rgba(255,255,255,.72),0 14px 34px rgba(232,121,185,.28);
+}
+.theme-kiraki .theme-toggle small{color:#6a4058;}
+
+/* Pink/Kiraki mode: keep the cute mood, but make data areas easier to read. */
+.theme-kiraki{
+  --card:rgba(255,255,255,.94);
+  --text:#211729;
+  --muted:#51445f;
+  --line:#e8c5d9;
+  --shadow:0 18px 46px rgba(174,92,139,.18);
+}
+.theme-kiraki .hero-card,
+.theme-kiraki .panel,
+.theme-kiraki .stat,
+.theme-kiraki .record-card{
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(255,250,253,.92)) padding-box,
+             linear-gradient(135deg,#f7a8cd,#a78bfa,#8ddcec) border-box;
+  box-shadow:var(--shadow);
+}
+.theme-kiraki .hero h1,
+.theme-kiraki .submit-hero h1,
+.theme-kiraki .section-head h2,
+.theme-kiraki .body h3,
+.theme-kiraki .stat strong{
+  color:#211729;
+  text-shadow:0 2px 0 rgba(255,255,255,.82),0 0 14px rgba(255,188,222,.24);
+}
+.theme-kiraki .lead,
+.theme-kiraki .section-head p,
+.theme-kiraki .hero-card small,
+.theme-kiraki .by,
+.theme-kiraki .meta,
+.theme-kiraki .rules p,
+.theme-kiraki .view-help{
+  color:#51445f;
+}
+.theme-kiraki .hero-card span,
+.theme-kiraki .stat span{
+  color:#5f566b;
+  font-weight:800;
+}
+.theme-kiraki .hero-card strong{color:#6d28d9;}
+.theme-kiraki .chip{
+  background:rgba(255,255,255,.97);
+  color:#45364f;
+  border-color:#e6bfd6;
+}
+.theme-kiraki .chip.active{
+  background:linear-gradient(135deg,#d9468f,#7c3aed);
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 10px 22px rgba(124,58,237,.22);
+}
+.theme-kiraki select,
+.theme-kiraki input,
+.theme-kiraki textarea{
+  background:rgba(255,255,255,.98);
+  color:#211729;
+  border-color:#e8c5d9;
+}
+.theme-kiraki .tags span{
+  background:#fff;
+  color:#5d3750;
+  border-color:#e9bfd5;
+  font-weight:700;
+}
+.theme-kiraki .badge{
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,210,232,.96));
+  color:#3b2033;
+}
+.theme-kiraki .watch{
+  background:linear-gradient(135deg,#3b2152,#c0267d);
+  color:#fff;
+}
+.theme-kiraki .overrun-box{
+  background:linear-gradient(135deg,#fff,#fff5f8);
+  color:#8f1238;
+}
