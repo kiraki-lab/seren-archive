@@ -95,3 +95,29 @@
   background:linear-gradient(135deg,#fff,#fff5f8);
   color:#8f1238;
 }
+
+/* Graph area in pink mode: use a white-mode-like data surface. */
+.theme-kiraki .chart-panel{
+  background:#fff;
+  border-color:#e8e2ec;
+  box-shadow:0 16px 42px rgba(80,70,95,.10);
+}
+.theme-kiraki .chart-scroller{
+  background:#fff;
+  border:1px solid #eee6f0;
+  border-radius:20px;
+  padding:12px 10px 14px;
+}
+.theme-kiraki .chart-inner,
+.theme-kiraki .chart-inner.fit-view,
+.theme-kiraki .chart-inner.detail-view{
+  background:#fff;
+}
+.theme-kiraki #jobChart{
+  background:#fff;
+}
+.theme-kiraki .chart-head h2,
+.theme-kiraki .chart-head p,
+.theme-kiraki .control-label{
+  color:#211729;
+}
